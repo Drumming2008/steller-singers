@@ -8,9 +8,21 @@
   src: url("./roboto.ttf");
 }
 
+@font-face {
+  font-family: noto-serif;
+  src: url("./noto_serif.ttf");
+}
+
 :root {
   --accent: #1d5d6c;
-  --panel: #eeeeee;
+  --accent-light: #417482;
+  --panel: white;
+  --panel-2: #ecf5f7;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
 }
 
 * {
@@ -21,11 +33,12 @@
   background: transparent;
   box-sizing: border-box;
   font-family: inherit;
-  font-family: roboto, sans-serif;
 }
 
 body, html {
   height: 100%;
+  font-family: noto-serif, serif;
+  overflow: hidden;
 }
 
 body {
@@ -34,16 +47,37 @@ body {
   background-image: url("steller_background.png");
   background-size: cover;
   background-position: center;
+  padding-top: 56px;
+  overflow-y: auto;
+}
+
+steller-icon {
+  display: block;
+  aspect-ratio: 1;
+  height: 1em;
+  background: currentColor;
+  mask-size: 100%;
+  -webkit-mask-size: 100%;
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
 }
 
 h1 {
   color: var(--accent);
-  font-family: bolby-one-sc, sans-serif;
+  /* font-family: bolby-one-sc, sans-serif; */
+  font-size: 1.75em;
+}
+
+h2 {
+  margin-bottom: 16px;
 }
 
 a {
   color: var(--accent);
   text-decoration-color: transparent;
+  border-radius: 4px;
 }
 
 a:hover {
@@ -63,6 +97,7 @@ header {
   left: 0;
   right: 0;
   height: 56px;
+  box-shadow: var(--shadow);
 }
 
 button {
@@ -98,11 +133,12 @@ svg {
   clip-path: inset(0 100% 0 0);
   transition: clip-path 0.2s ease, right 0.2s ease;
   border-top-left-radius: 16px;
+  box-shadow: var(--shadow);
 }
 
-#hamburger.open {
+#hamburger.open, #hamburger:has(:focus-visible) {
   right: 0;
-  clip-path: inset(0 0 0 0);
+  clip-path: inset(0 0 0 -8px);
 }
 
 #hamburger > ul {
@@ -112,28 +148,90 @@ svg {
   list-style: none;
 }
 
+#hamburger > ul > li {
+  position: relative;
+}
+
 #hamburger > ul > li > a {
   display: flex;
   align-items: center;
   gap: 8px;
   text-decoration: none;
   position: relative;
-  margin-bottom: 2px;
-  padding-bottom: 2px;
 }
 
-#hamburger > ul > li > a::after {
-  content: "";
+#hamburger > ul > li > a > svg {
+  transition: transform 0.2s ease;
+}
+
+#hamburger > ul > li > .hamburger-link-overlay {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -2px;
-  height: 2px;
-  background: currentColor;
+  inset: 0;
   clip-path: inset(0 100% 0 0);
   transition: clip-path 0.4s ease;
+  color: transparent;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
 }
 
-#hamburger > ul > li > a:is(:hover, :focus-visible)::after {
+.hamburger-link-overlay > svg {
+  opacity: 0;
+}
+
+#hamburger > ul > li:is(:hover, :focus-within) > .hamburger-link-overlay {
   clip-path: inset(0 0 0 0);
+  transition: clip-path 1s ease;
+}
+
+#hamburger > ul > li:is(:hover, :focus-within) > a > svg {
+  transform: rotate(calc(-15deg * var(--rotation-modifier)));
+}
+
+.separator {
+  height: 1px;
+  background: currentColor;
+}
+
+#main-logo > a {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  transform: translateY(-2px);
+}
+
+#main-logo > a > steller-icon {
+  transform: translateY(-5px);
+}
+
+section {
+  padding: 16px;
+  background: var(--panel-2);
+  margin: 24px;
+}
+
+/* member bios */
+#members {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+}
+
+.bio-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 300px;
+  flex-shrink: 0;
+}
+
+.bio-wrapper > img {
+  aspect-ratio: 8.5 / 11;
+  object-fit: cover;
+  object-position: center;
+  width: 200px;
+  border: 1px solid currentColor;
+}
+
+.bio-wrapper > p {
+  text-align: justify;
 }
